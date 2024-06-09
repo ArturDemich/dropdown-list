@@ -1,0 +1,47 @@
+.container {
+  background-color: #0a0c0f;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0px 10px 0px 10px;
+}
+header {
+  min-height: 20px;
+  border-bottom: 1px solid #3f3f3f;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;  
+  color: #c0c0c0;
+  align-items: center;
+}
+
+.coins {
+  display: flex;
+  gap: 15px;
+}
+.divider {
+  width: 1px;
+  height: 18px; 
+  background-color: #3f3f3f; 
+  margin: 0px; 
+}
+
+
+.content {
+  display: flex;
+  flex: 1;    
+  align-self: center;
+  padding: 15px;
+}
+
+footer {
+  display: flex;
+  align-self: flex-end;
+  padding: 15px;
+  font-style: italic;
+}
+
+
