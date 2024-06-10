@@ -2,38 +2,69 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import "./ButtonSearch.css";
 import { IconEmptyStar, IconSearch, IconStar } from "./Icons";
 
+const Favorites = ["WINGS", "CVP", "DOT", "MSOL", "JENNER"];
+
 const RenderCoin = ({ name }) => {
-  if (name === '' || name === undefined) {
-    return null
+  const [favIdx, setFavIdx] = useState();
+  const [favCoins, setFavCoins] = useState(Favorites);
+
+  useEffect(() => {
+    const index = Favorites.indexOf(name);
+    setFavIdx(index);
+  }, []);
+
+  const addFavorite = () => {
+    if (favIdx === -1) {
+      Favorites.push(name);
+      setFavCoins(name);
+    }
+    console.log(Favorites);
+  };
+
+  if (name === "" || name === undefined) {
+    return null;
   }
 
   return (
-    <div>
-      <IconEmptyStar />
-      {name}
+    <div className="list-item" onClick={() => addFavorite()}>
+      {favIdx === -1 ? <IconEmptyStar /> : <IconStar />}
+      <span>{name}</span>
     </div>
   );
-}
+};
 
 export default function ButtonSearch() {
-  const [dataCoins, setDataCoins] = useState([])
+  const [dataCoins, setDataCoins] = useState([]);
+  const [favCoins, setFavCoins] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState(false);
+  const [allCoins, setAllCoins] = useState(Data);
   const [isOpen, setOpen] = useState(false);
-  const [textSearch, setTextSearch] = useState('')
+  const [textSearch, setTextSearch] = useState("");
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
 
   const cleanInput = () => {
-    setTextSearch('')
-    setDataCoins(Data)
-  }
+    setTextSearch("")
+    selectedFilter ? setDataCoins(Favorites) : setDataCoins(Data)
+  };
+
+  const selectFilter = (value) => {
+    if (selectedFilter) {
+      setDataCoins(Data);
+      setSelectedFilter(value);
+    } else {
+      setDataCoins(Favorites);
+      setSelectedFilter(value);
+    }
+  };
 
   const handleInputChange = (event) => {
-    let value = event.target.value
-    let filterCoins = Data.filter(item =>
+    let value = event.target.value;
+    let filterCoins = Data.filter((item) =>
       item.toLowerCase().includes(value.toLowerCase())
-    )
-    setTextSearch(value)
-    setDataCoins(filterCoins)
+    );
+    setTextSearch(value);
+    setDataCoins(filterCoins);
   };
 
   const handleClickOutside = useCallback((event) => {
@@ -43,14 +74,14 @@ export default function ButtonSearch() {
       buttonRef.current &&
       !buttonRef.current.contains(event.target)
     ) {
-      setOpen(false)
-      cleanInput()
+      setOpen(false);
+     // cleanInput();
     }
   }, []);
 
   useEffect(() => {
-    setDataCoins(Data)
-  }, [])
+    selectedFilter ? setDataCoins(Favorites) : setDataCoins(Data)
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -78,32 +109,55 @@ export default function ButtonSearch() {
             <span>
               <IconSearch />
             </span>
-            <input type="text" placeholder="Search..." onChange={handleInputChange} value={textSearch} />
-            {textSearch && <span className="close" onClick={() => cleanInput()}>
-              X
-            </span>}
+            <input
+              type="text"
+              placeholder="Search..."
+              onChange={handleInputChange}
+              value={textSearch}
+            />
+            {textSearch && (
+              <span className="close" onClick={() => cleanInput()}>
+                X
+              </span>
+            )}
           </div>
 
           <div className="modal-filter-block">
-            <div className="fav-filter">
+            <div
+              className={
+                !selectedFilter
+                  ? "fav-filter"
+                  : "filter-selected " + "fav-filter"
+              }
+              onClick={() => selectFilter(true)}
+            >
               <IconStar />
               <div className="favorites">Favorites</div>
             </div>
-            <div className="all-coins">All Coins</div>
+            <div
+              className={
+                selectedFilter ? "all-coins" : "filter-selected " + "all-coins"
+              }
+              onClick={() => selectFilter(false)}
+            >
+              All Coins
+            </div>
           </div>
 
           <div className="modal-list">
-            {dataCoins.length > 0 ? dataCoins.map((item, index) => (
-              <RenderCoin key={index} name={item} />
-            )) :
-              <div className="noData">Not found...</div>}
+            {dataCoins.length > 0 ? (
+              dataCoins.map((item, index) => (
+                <RenderCoin key={index} name={item} />
+              ))
+            ) : (
+              <div className="noData">Not found...</div>
+            )}
           </div>
         </div>
       )}
     </div>
   );
 }
-
 
 const Data = [
   "WINGS",

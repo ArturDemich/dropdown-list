@@ -15,6 +15,7 @@ button {
   font-family: monospace;
   font-weight: 500;
   min-height: 30px;
+  padding: 3px 8px 0px 8px;
 }
 button:hover {
   background-color: #343434;
@@ -31,7 +32,8 @@ button:hover {
   height: 300px;
   border: 2px solid #3f3f3f;
   border-radius: 8px;
-  display: grid;    
+  display: grid;
+  color: #a09f9f;    
 }
 
 .input {
@@ -43,26 +45,33 @@ button:hover {
   display: flex;
   align-items: center;  
   height: fit-content;
+  
 }
-
+.input svg {
+  color: #7c7c7c;
+}
+.input span {
+  display: flex;
+}
 .modal input {
   background-color: #0a0c0f;
   border: none;
-  color: white;
+ 
 }
 .modal input:focus,
 .modal input:active {
   outline: none;
   color: #ffffff;
 }
+
 .close {
   cursor: pointer;
 }
 
 .modal-filter-block {
   display: flex;
-  padding: 8px;
-  gap: 30px;
+  padding: 1px 1px 3px 1px;
+  gap: 12px;
   text-transform: uppercase;
   font-size: 14px;
   background-color: #0a0c0f;
@@ -70,21 +79,42 @@ button:hover {
 .fav-filter {
   display: flex;
   margin-left: 3px;
-}
-.favorites {
+  padding: 3px 8px 5px 8px;
+  align-self: center;
   cursor: pointer;
+}
+.fav-filter svg {
+  margin-right: 7px;
+}
+
+.fav-filter:hover {
+  background-color: #343434;
+  border-radius: 5px;  
+}
+.filter-selected {
+  color: #ffffff;
+  font-weight: 450;
 }
 .all-coins {
   cursor: pointer;
+  padding: 3px 8px 5px 8px;
+  align-self: center;
 }
-
+.all-coins:hover {
+  background-color: #343434;
+  border-radius: 5px;
+  
+}
 .modal-list {
   background-color: #0a0c0ff3;
   overflow: auto;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  padding: 0 0 0 11px;
+  padding: 0 0 0 3px;
   height: 220px;
+  gap: 5px;
+  display: flex;
+  flex-direction: column;
 }
 .noData {
   display: flex;
@@ -100,4 +130,21 @@ button:hover {
 ::-webkit-scrollbar-thumb {
   background-color: #080808;
   border-radius: 30px;
+}
+
+.list-item {  
+  padding: 4px 0px 4px 8px;
+  display: flex;  
+  cursor: pointer;  
+  font-size: 14px;
+}
+.list-item:hover {
+  background-color: #343434;
+  border-radius: 5px;
+}
+.list-item span {
+  font-size: 13px;
+  letter-spacing: 1px;
+  font-weight: 400;
+  margin-left: 7px;
 }
