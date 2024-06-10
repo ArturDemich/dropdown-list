@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./ButtonSearch.css";
 import { IconEmptyStar, IconSearch, IconStar } from "./Icons";
 
-function RenderCoin({ name }) {
-  
+const RenderCoin = ({ name }) => {
+  if (name === '' || name === undefined) {
+    return null
+  }
+
   return (
     <div>
       <IconEmptyStar />
@@ -12,17 +15,28 @@ function RenderCoin({ name }) {
   );
 }
 
-function ButtonSearch() {
+export default function ButtonSearch() {
+  const [dataCoins, setDataCoins] = useState([])
   const [isOpen, setOpen] = useState(false);
   const [textSearch, setTextSearch] = useState('')
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
 
+  const cleanInput = () => {
+    setTextSearch('')
+    setDataCoins(Data)
+  }
+
   const handleInputChange = (event) => {
-    setTextSearch(event.target.value)
+    let value = event.target.value
+    let filterCoins = Data.filter(item =>
+      item.toLowerCase().includes(value.toLowerCase())
+    )
+    setTextSearch(value)
+    setDataCoins(filterCoins)
   };
 
-  const handleClickOutside = (event) => {
+  const handleClickOutside = useCallback((event) => {
     if (
       modalRef.current &&
       !modalRef.current.contains(event.target) &&
@@ -30,9 +44,13 @@ function ButtonSearch() {
       !buttonRef.current.contains(event.target)
     ) {
       setOpen(false)
-      setTextSearch('')
+      cleanInput()
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    setDataCoins(Data)
+  }, [])
 
   useEffect(() => {
     if (isOpen) {
@@ -43,7 +61,7 @@ function ButtonSearch() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen, handleClickOutside]);
   return (
     <div className="searchBtn">
       <button
@@ -60,10 +78,10 @@ function ButtonSearch() {
             <span>
               <IconSearch />
             </span>
-            <input type="text" placeholder="Search..." onChange={handleInputChange} value={textSearch}/>
-            <span className="close" onClick={() => setOpen(false)}>
+            <input type="text" placeholder="Search..." onChange={handleInputChange} value={textSearch} />
+            {textSearch && <span className="close" onClick={() => cleanInput()}>
               X
-            </span>
+            </span>}
           </div>
 
           <div className="modal-filter-block">
@@ -75,16 +93,17 @@ function ButtonSearch() {
           </div>
 
           <div className="modal-list">
-            {Data.map((item, index) => (
+            {dataCoins.length > 0 ? dataCoins.map((item, index) => (
               <RenderCoin key={index} name={item} />
-            ))}
+            )) :
+              <div className="noData">Not found...</div>}
           </div>
         </div>
       )}
     </div>
   );
 }
-export default ButtonSearch;
+
 
 const Data = [
   "WINGS",
