@@ -16,7 +16,7 @@ function App() {
 
         <ButtonSearch />
       </header>
-      <section className="content">Youre content...</section>
+      <section className="content">Search button</section>
       <footer>created by Artur Demich</footer>
     </div>
   );

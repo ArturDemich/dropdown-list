@@ -50,3 +50,27 @@ export function IconEmptyStar() {
     </svg>
   );
 }
+
+export function IconCrossClose() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="-6 -6 24 24"
+    >
+      <defs>
+        <linearGradient id="grad1" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" style={{ stopColor: 'rgba(9,4,79,1)', stopOpacity: 1 }} />
+          <stop offset="40%" style={{ stopColor: 'rgba(34,34,172,1)', stopOpacity: 1 }} />
+          <stop offset="99%" style={{ stopColor: 'rgba(6,165,198,1)', stopOpacity: 1 }} />
+          <stop offset="100%" style={{ stopColor: 'rgba(5,183,228,1)', stopOpacity: 1 }} />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#grad1)"
+        d="m7.314 5.9l3.535-3.536A1 1 0 1 0 9.435.95L5.899 4.485L2.364.95A1 1 0 1 0 .95 2.364l3.535 3.535L.95 9.435a1 1 0 1 0 1.414 1.414l3.535-3.535l3.536 3.535a1 1 0 1 0 1.414-1.414L7.314 5.899z"
+      ></path>
+    </svg>
+  );
+};

@@ -1,43 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { IconCrossClose, IconSearch, IconStar } from "./Icons";
+import ItemCoins from "./ItemCoins";
 import "./ButtonSearch.css";
-import { IconEmptyStar, IconSearch, IconStar } from "./Icons";
 
 const Favorites = ["WINGS", "CVP", "DOT", "MSOL", "JENNER"];
-
-const RenderCoin = ({ name }) => {
-  const [favIdx, setFavIdx] = useState();
-  const [favCoins, setFavCoins] = useState(Favorites);
-
-  useEffect(() => {
-    const index = Favorites.indexOf(name);
-    setFavIdx(index);
-  }, []);
-
-  const addFavorite = () => {
-    if (favIdx === -1) {
-      Favorites.push(name);
-      setFavCoins(name);
-    }
-    console.log(Favorites);
-  };
-
-  if (name === "" || name === undefined) {
-    return null;
-  }
-
-  return (
-    <div className="list-item" onClick={() => addFavorite()}>
-      {favIdx === -1 ? <IconEmptyStar /> : <IconStar />}
-      <span>{name}</span>
-    </div>
-  );
-};
 
 export default function ButtonSearch() {
   const [dataCoins, setDataCoins] = useState([]);
   const [favCoins, setFavCoins] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(false);
-  const [allCoins, setAllCoins] = useState(Data);
   const [isOpen, setOpen] = useState(false);
   const [textSearch, setTextSearch] = useState("");
   const modalRef = useRef(null);
@@ -48,7 +19,19 @@ export default function ButtonSearch() {
     selectedFilter ? setDataCoins(Favorites) : setDataCoins(Data)
   };
 
+  const addFavorite = (coinsName) => {
+    const index = favCoins.indexOf(coinsName);
+    if (index === -1) {
+      Favorites.push(coinsName);
+      setFavCoins([...favCoins, coinsName])
+    } else {
+      Favorites.splice(index, 1)
+      setFavCoins(favCoins.filter(coin => coin !== coinsName));
+    }
+  };
+
   const selectFilter = (value) => {
+    cleanInput()
     if (selectedFilter) {
       setDataCoins(Data);
       setSelectedFilter(value);
@@ -58,11 +41,15 @@ export default function ButtonSearch() {
     }
   };
 
+  const filter = (data, val) => {
+    const filtered = data.filter((item) =>
+      item.toLowerCase().includes(val.toLowerCase())
+    );
+    return filtered
+  }
   const handleInputChange = (event) => {
     let value = event.target.value;
-    let filterCoins = Data.filter((item) =>
-      item.toLowerCase().includes(value.toLowerCase())
-    );
+    let filterCoins = selectedFilter ? filter(Favorites, value) : filter(Data, value)
     setTextSearch(value);
     setDataCoins(filterCoins);
   };
@@ -74,14 +61,19 @@ export default function ButtonSearch() {
       buttonRef.current &&
       !buttonRef.current.contains(event.target)
     ) {
-      setOpen(false);
-     // cleanInput();
+      setOpen(false);     
+      cleanInput()
     }
   }, []);
 
   useEffect(() => {
+    setFavCoins(Favorites)
+    setDataCoins(Data)
+  },[])
+
+  useEffect(() => {
     selectedFilter ? setDataCoins(Favorites) : setDataCoins(Data)
-  }, []);
+  }, [selectedFilter]);
 
   useEffect(() => {
     if (isOpen) {
@@ -117,7 +109,7 @@ export default function ButtonSearch() {
             />
             {textSearch && (
               <span className="close" onClick={() => cleanInput()}>
-                X
+                <IconCrossClose />
               </span>
             )}
           </div>
@@ -147,7 +139,7 @@ export default function ButtonSearch() {
           <div className="modal-list">
             {dataCoins.length > 0 ? (
               dataCoins.map((item, index) => (
-                <RenderCoin key={index} name={item} />
+                <ItemCoins key={index} name={item} favorite={Favorites} addFavorite={() => addFavorite(item)}/>
               ))
             ) : (
               <div className="noData">Not found...</div>
