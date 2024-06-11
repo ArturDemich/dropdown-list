@@ -33,7 +33,8 @@ button:hover {
   border: 2px solid #3f3f3f;
   border-radius: 8px;
   display: grid;
-  color: #a09f9f;    
+  color: #a09f9f;   
+  position: absolute; 
 }
 
 .input {
@@ -151,4 +152,10 @@ button:hover {
   letter-spacing: 1px;
   font-weight: 400;
   margin-left: 7px;
+}
+
+@media screen and (max-width: 532px) {
+  .modal {
+    left: 117px;
+  }
 }
